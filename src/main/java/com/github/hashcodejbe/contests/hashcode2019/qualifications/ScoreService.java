@@ -18,26 +18,26 @@ public class ScoreService {
 
     public HashMap<String, Integer> getScore(List<MultipartFile> multipartFiles) throws IOException {
         HashMap<String, Integer> result = new HashMap<>();
-        ScoreThread[] scores = new ScoreThread[multipartFiles.size()];
-        for (int i = 0; i < multipartFiles.size(); i++) {
-            scores[i] = new ScoreThread(multipartFiles.get(i));
-            scores[i].start();
-        }
-        for (int i=0;i<scores.length;i++) {
-            try {
-                scores[i].join();
-            } catch(InterruptedException e) {
-                System.out.println("Thread interrupted: " + e);
-                e.printStackTrace();
-            }
-        }
+//        ScoreThread[] scores = new ScoreThread[multipartFiles.size()];
+//        for (int i = 0; i < multipartFiles.size(); i++) {
+//            scores[i] = new ScoreThread(multipartFiles.get(i));
+//            scores[i].start();
+//        }
+//        for (int i=0;i<scores.length;i++) {
+//            try {
+//                scores[i].join();
+//            } catch(InterruptedException e) {
+//                System.out.println("Thread interrupted: " + e);
+//                e.printStackTrace();
+//            }
+//        }
 
         int total = 0;
-        for (int i=0;i<scores.length;i++) {
-            int score = scores[i].getScore();
+        for (MultipartFile multipartFile: multipartFiles) {
+            int score = getOneScore(multipartFile);
             total += score;
 
-            String fileName = String.valueOf(multipartFiles.get(i).getOriginalFilename().charAt(0));
+            String fileName = String.valueOf(multipartFile.getOriginalFilename().charAt(0));
             result.put(fileName, score);
         }
         result.put("total", total);
